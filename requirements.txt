@@ -4,3 +4,4 @@ loguru
 prometheus-client
 waitress
 werkzeug
+influxdb-client

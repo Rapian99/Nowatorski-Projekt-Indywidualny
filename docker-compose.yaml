@@ -4,11 +4,53 @@ services:
     build: .
     hostname: ara
     container_name: adapter
+    environment:
+      - INFLUX_URL=http://influxdb:8086
+      - INFLUX_TOKEN=token123
+      - INFLUX_ORG=my-org
+      - INFLUX_BUCKET=sensors
+      - TASMOTA_IP=192.168.1.65
+      - POLL_INTERVAL=60
+      - PORT=5000
     restart: unless-stopped
     ports:
       - "5000:5000"
     networks:
       - monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./data/prometheus:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alert_rules.yml:/etc/prometheus/alert_rules.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - monitoring
+  influxdb:
+      image: influxdb:2
+      container_name: influxdb
+      restart: always
+      ports:
+        - "8086:8086"
+      environment:
+        - DOCKER_INFLUXDB_INIT_MODE=setup
+        - DOCKER_INFLUXDB_INIT_USERNAME=admin
+        - DOCKER_INFLUXDB_INIT_PASSWORD=adminpassword
+        - DOCKER_INFLUXDB_INIT_ORG=my-org
+        - DOCKER_INFLUXDB_INIT_BUCKET=sensors
+        - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=token123
+      volumes:
+        - influxdb-data:/var/lib/influxdb2
+      networks:
+        - monitoring
+
+volumes:
+  influxdb-data:
 
 networks:
   monitoring:

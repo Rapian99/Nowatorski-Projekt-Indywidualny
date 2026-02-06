@@ -1,0 +1,17 @@
+groups:
+  - name: tasmota_alerts
+    rules:
+      - alert: HighPM25Concentration
+        expr: tasmota_pm2_5_ugm3 > 50 
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Wysokie stężenie pyłów PM2.5!"
+          description: "Wartość PM2.5 przekroczyła 50 µg/m³ na stacji {{ $labels.sensor_id }}."
+
+      - alert: TasmotaHighTemperature
+        expr: tasmota_temperature_celsius{sensor_id="Tasmota_Station_1"} > 15
+        annotations:
+          summary: "High temperature detected at Tasmota Station 1"
+          description: "Temperature at Tasmota_Station_1 is {{ $value }}°C, which exceeds 15°C"

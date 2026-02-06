@@ -1,0 +1,19 @@
+name: 'Check File'
+description: 'Sprawdza czy wymagany plik istnieje w repozytorium'
+inputs:
+  filename:
+    description: 'Nazwa pliku do sprawdzenia'
+    required: true
+    default: 'main.py'
+runs:
+  using: "composite"
+  steps:
+    - name: Check file
+      shell: bash
+      run: |
+        if [ -f "${{ inputs.filename }}" ]; then
+          echo "Plik ${{ inputs.filename }} istnieje."
+        else
+          echo "Brak pliku ${{ inputs.filename }}!"
+          exit 1
+        fi

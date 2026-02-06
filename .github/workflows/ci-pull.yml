@@ -1,0 +1,9 @@
+name: Pull Request Check
+
+on:
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  quality-check:
+    uses: ./.github/workflows/reusable.yml
