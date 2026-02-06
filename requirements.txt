@@ -1,0 +1,6 @@
+flask
+requests
+loguru
+prometheus-client
+waitress
+werkzeug

@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  air-rohr-adapter:
+    build: .
+    hostname: ara
+    container_name: adapter
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    driver: bridge
